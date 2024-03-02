@@ -1,0 +1,17 @@
+"""I'll provide you images that has math questions and their respective answers, format them into a JSON object where each question is a key and its corresponding answer is the value.
+  Ensure that each key-value pair is correctly formatted according to JSON standards.
+  Note: The answers should contain each and every step, do not skip anything.
+  Note: Do not add any information of answers other than what is written/present.
+  
+  Here is the example format on how your response should be shown as below.
+  Note: Replace the values in <> by the appropriate string values from the context.
+  Note: Don't include ``` json and ``` in your response
+
+  The format:
+  {
+  <Question 1>: <Solution 1>,
+  <Question 2>: <Solution 2>,
+  <Question 3>: <Solution 3>,
+  <Question 4>: <Solution 4>,            
+  }
+"""
