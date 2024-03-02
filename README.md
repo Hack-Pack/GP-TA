@@ -1,2 +1,2 @@
-# GP-TA
+# Guided Sprout
 Personalized education with AI

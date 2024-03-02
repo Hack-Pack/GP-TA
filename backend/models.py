@@ -17,7 +17,7 @@ class TextModel(Model):
     def __init__(self, model_name="gpt-4-1106-preview"):
         super().__init__(model_name)
 
-    def complete(self, prompt, role):
+    def complete(self, prompt, role="Teacher"):
         messages = [
             {"role": "system", "content": role},
             {"role": "user", "content": prompt}
@@ -25,8 +25,7 @@ class TextModel(Model):
         
         completion = client.chat.completions.create(model=self.model_name,
         temperature=0,
-        messages=messages,
-        response_format={"type": "json_object"})
+        messages=messages)
         
         # Returning the response message
         return completion.choices[0].message.content
@@ -57,3 +56,12 @@ class VisionModel(Model):
         max_tokens=2000)
         
         return response.choices[0].message.content
+    
+def tts(input_text, output_file):
+    client = OpenAI()
+    response = client.audio.speech.create(
+        model="tts-1",
+        voice="alloy",
+        input=input_text
+    )
+    response.stream_to_file(output_file)
