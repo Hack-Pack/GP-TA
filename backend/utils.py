@@ -1,75 +1,56 @@
 import json
 import pandas as pd
-from models import VisionModel
+import re
+from models import *
 
-def json_to_csv(json_data, csv_file):    
-    data = json.loads(json_data)
-        
-    ids = []
-    questions = []
-    answers = []
+def dict_to_csv(dictionary, csv_file_path):
+    # Initialize a list to hold the rows of the DataFrame
+    rows = []
     
-    # Iterate through each key-value pair in the JSON data
-    for key, value in data.items():            
-        question = key
-        answer = value
-        
-        # Generate id based on the index of the key
-        _id = key[1:key.find(':')]
-                            
-        ids.append(_id)
-        questions.append(question)
-        answers.append(answer)
-            
-    df = pd.DataFrame({
-        'id': ids,
-        'question': questions,
-        'answer': answers
-    })
-        
-    df.to_csv(csv_file, index=False)
+    # Iterate through the dictionary to extract each question and its details
+    for question_id, details in dictionary.items():
+        for question, student_answer in details.items():
+            # Convert question_id to integer (strip 'Q' and convert to int)
+            q_id = int(question_id.strip('Q'))
+            # Append the extracted information as a row in the list
+            rows.append({
+                'question_id': q_id,
+                'question': question,
+                'student_answer': student_answer
+            })
     
-def add_answers_to_csv(answers_json, csv_file):    
-    answers_data = json.loads(answers_json)
+    # Convert the list of rows into a DataFrame
+    df = pd.DataFrame(rows)
     
-    df = pd.read_csv(csv_file)
+    # Save the DataFrame to a CSV file
+    df.to_csv(csv_file_path, index=False)
     
-    answers = []
+def add_instruct_answer_to_csv(dictionary, csv_file_path):
+    # Load the CSV file
+    df = pd.read_csv(csv_file_path)
+    solutions = []
+    for question, details in dictionary.items():
+        for problem, solution in details.items():
+            solutions.append(solution)
+    # Create the new column and populate it
+    df['instructor_answer'] = solutions
+    df.to_csv(csv_file_path, index=False)
 
-    # Iterate through each row in the DataFrame and append the corresponding answer
-    for answer in answers_data.values():                        
-        answers.append(answer)
+def extract_content(string):
+    start_index = string.find("{")  # Find the index of the first "{"
+    end_index = string.rfind("}")   # Find the index of the last "}"
     
-    df['student_answer'] = answers
-
-    df.to_csv(csv_file, index=False)
+    if start_index == -1 or end_index == -1:  # If either "{" or "}" is not found
+        return None
+    
+    return string[start_index:end_index + 1] 
     
 def process_form(prompt_path, img_path):
-    try:
-        vision_model = VisionModel()
-        with open(prompt_path, "r", encoding="utf-8") as f:
-            prompt = f.read()
-        response = vision_model.complete(prompt, img_path)
-        return response
-    except Exception as e:
-        print(f"An error occurred: {e}")
 
-# Instructor
-# img_path = "data/instructor_images"
-# out_path = "data/instructor.json"
-# prompt_path = "prompts/csv_promt.txt"
-# csv_output = "output.csv"
+    vision_model = VisionModel()
+    with open(prompt_path, "r", encoding="utf-8") as f:
+        prompt = f.read()
+    response = vision_model.complete(prompt, img_path)
+    dict_object = json.loads(extract_content(response))
 
-# response = process_form(prompt_path, img_path)
-# print(response)
-
-# json_to_csv(response, csv_output)
-
-# # Student
-# img_path = "data/student_images"
-# out_path = "data/student.json"
-
-# response = process_form(prompt_path, img_path)
-# print(response)
-
-# add_answers_to_csv(response, csv_output)
+    return dict_object

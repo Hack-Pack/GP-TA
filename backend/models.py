@@ -25,8 +25,7 @@ class TextModel(Model):
         
         completion = client.chat.completions.create(model=self.model_name,
         temperature=0,
-        messages=messages,
-        response_format={"type": "json_object"})
+        messages=messages)
         
         # Returning the response message
         return completion.choices[0].message.content
@@ -54,6 +53,15 @@ class VisionModel(Model):
         response = client.chat.completions.create(model=self.model_name,
         messages=[{"role": "user", "content": content}],
         temperature=0,
-        max_tokens=2000)
+        max_tokens=4000)
         
         return response.choices[0].message.content
+    
+def tts(input_text, output_file):
+    client = OpenAI()
+    response = client.audio.speech.create(
+        model="tts-1",
+        voice="alloy",
+        input=input_text
+    )
+    response.stream_to_file(output_file)

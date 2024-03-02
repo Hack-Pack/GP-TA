@@ -1,17 +1,11 @@
-"""I'll provide you images that has math questions and their respective answers, format them into a JSON object where each question is a key and its corresponding answer is the value.
-  Ensure that each key-value pair is correctly formatted according to JSON standards.
-  Note: The answers should contain each and every step, do not skip anything.
-  Note: Do not add any information of answers other than what is written/present.
-  
-  Here is the example format on how your response should be shown as below.
-  Note: Replace the values in <> by the appropriate string values from the context.
-  Note: Don't include ``` json and ``` in your response
+Examine the scanned image of the exam paper closely and identify the question numbers, the questions themselves, and the sequence of solutions, which includes all the intermediary steps taken by the student. Format your response as a json object, with the question number serving as the key. Within this object, the question text should be the key for a string that contains each step (separated by commas) leading to the final solution.
 
-  The format:
-  {
-  <Question 1>: <Solution 1>,
-  <Question 2>: <Solution 2>,
-  <Question 3>: <Solution 3>,
-  <Question 4>: <Solution 4>,            
+For instance, if the image depicts 'Q1: Solve for x: 2x + 5 = 15' with the student's working steps '2x = 10', 'x = 10 / 2', and the final solution 'x = 5', then you should present your output as follows:
+```
+{
+  "Q1": {
+    "Solve for x: 2x + 5 = 15": "2x = 10, x = 10 / 2, x = 5"
   }
-"""
+}
+```
+Ensure that you transcribe all text and mathematical expressions with precision from the image and structure the information as indicated. The questions and their respective solutions must be exactly as they are displayed on the exam paper, including the numbering of the questions.
