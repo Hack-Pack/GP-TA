@@ -21,8 +21,9 @@ if page == "Homepage":
     uploaded_rubric = st.sidebar.file_uploader("Upload Rubric", type=None)  # You can specify types with the 'type' parameter
     if st.sidebar.button("Upload Files"):
         if uploaded_assignments and uploaded_rubric:
-
-            #Handle the uploaded files
+            for uploaded_assignment in uploaded_assignments:
+                save_uploaded_file(uploaded_assignment, "testing_data/pdfs_images")
+            save_uploaded_file(uploaded_rubric , "testing_data/pdfs_images")
 
 
             st.sidebar.write("Files have been successfully uploaded.")
