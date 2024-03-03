@@ -37,9 +37,6 @@ st.markdown(
             margin-left: auto;
             margin-right: auto;
         }
-        html, body, [class*="st-"] {
-            font-size: 20px;
-        }
         [class*="st-"] p {
             font-size: 16px;
         }
@@ -107,7 +104,12 @@ if page == "Homepage":
         with tab1:
             # Create an empty placeholder
             text_placeholder = st.empty()
-            if st.button("Evaluate"):
+            evaluate_button_placeholder = st.empty()
+
+            # Use the placeholder to display the button
+            if evaluate_button_placeholder.button("Evaluate"):
+                # Clear the placeholder, making the button disappear
+                evaluate_button_placeholder.empty()
                 print(
                     st.session_state.student_images_paths,
                     st.session_state.instructor_images_path,
