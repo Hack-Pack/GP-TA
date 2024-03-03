@@ -8,20 +8,56 @@ def process_images(student_img_path, instructor_img_path, prompt_path, csv_path)
     add_instruct_answer_to_csv(instructor_response, csv_path)
 
 
-def evaluate_question(question, student_answer, instructor_answer):
+def evaluate_question(question_id, question, student_answer, instructor_answer):
+    # Assuming gpt3_model and gpt4_model are defined elsewhere in your script
     gpt3_model = TextModel(model_name="gpt-3.5-turbo-0125")
     router_prompt = (f"Given the question: '{question}', evaluate if the student's answer: '{student_answer}' "
               f"is 100% correct against the instructor's answer: '{instructor_answer}'. "
-              f"Return '(correct:1)' if the student's answer is fully correct, or '(correct:0)'\
-                  if the answer is incorrect or if you are unsure.")
+              f"Return '(correct:1)' if the student's answer is fully correct, or '(correct:0)' "
+              f"if the answer is incorrect or if you are unsure.")
     first_evaluation = gpt3_model.complete(prompt=router_prompt, role="user")
     eval_result = 1 if "(correct:1)" in first_evaluation else 0
-    if eval_result: return "Correct answer"
+    
+    # Load CSV file
+    df = pd.read_csv('out.csv')
+    
+    # Check if 'evaluation' column exists, if not add it
+    if 'evaluation' not in df.columns:
+        df['evaluation'] = None
+    
+    # Update the DataFrame based on eval_result
+    if eval_result:
+        evaluation_text = "Correct answer"
+    else:
+        gpt4_model = TextModel(model_name="gpt-4-1106-preview")
+        cot_prompt = (f"Given the question: '{question}', evaluate step by step and succinctly answer why the student's answer: '{student_answer}' "
+                      f"is partially or completely wrong against the instructor's answer: '{instructor_answer}'.")
+        evaluation_text = gpt4_model.complete(cot_prompt)
+    
+    # Update the 'evaluation' column for the corresponding question_id
+    df.loc[df['question_id'] == question_id, 'evaluation'] = evaluation_text
+    
+    # Save the updated DataFrame back to CSV, overwriting the original file
+    df.to_csv('out.csv', index=False)
 
-    gpt4_model = TextModel(model_name="gpt-4-1106-preview")
-    cot_prompt = (
-        f"Given the question: '{question}', evaluate step by step and succinctly answer why the student's answer: '{student_answer}' "
-              f"is partially or completely wrong against the instructor's answer: '{instructor_answer}'. "
-    )
-    second_evaluation = gpt4_model.complete(cot_prompt)
-    return second_evaluation
+    return evaluation_text
+
+def run_tts():
+    # Assume tts function is defined elsewhere in your code
+    # and pandas is already imported as pd
+
+    # Load the DataFrame
+    df = pd.read_csv('out.csv')
+    
+    # Filter df to only "question" and "evaluation" columns
+    filtered_df = df[['question', 'evaluation']]
+    
+    # Convert all rows in these columns to a single string representation
+    # Each row's values are joined by a space, and rows are separated by a newline
+    string_representation = '\n'.join(filtered_df.apply(lambda x: f"{x['question']} {x['evaluation']}", axis=1))
+    
+    # Format the string for the tts function, asking to generate a summary
+    input_text = f"Based on the following student performance:\n{string_representation}\nPlease generate a succinct 4-5 sentence summary of the student's performance, highlighting strengths and weaknesses, that starts with: Hey Kenny, your performance on the exam was..."
+    
+    # Call the tts function with the formatted string
+    tts(input_text)
