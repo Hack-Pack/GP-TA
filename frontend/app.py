@@ -152,30 +152,33 @@ if page == "Homepage":
                     st.toast('Hooray!', icon='🎉')
                                         
             with tab2:
+                bool_speech_show = 0
                 if st.button("Generate Feedback "):
                     run_tts()
                     rec_questions = top_k_matched_questions("Simplify the expression 2x^2 - 8 / x - 2", k=5)
                     questions_id_list = [int(question.split('.')[0]) for question in rec_questions]
                     questions_text_list = ['.'.join(question.split('.')[1:]).strip() for question in rec_questions]
+                    bool_speech_show = 1
 
 
                 text_placeholder = st.empty()
                 
                 # TODO: TTS
                 # Adding an audio player
-                st.write("Listen to your assignment feedback!")
+                if bool_speech_show:
+                    st.write("Listen to your assignment feedback!")
+                    
+                    audio_file = open(
+                        VOICE_TESTING, "rb"
+                    )
+                    audio_bytes = audio_file.read()
+                    st.audio(audio_bytes, format="audio/mp3", start_time=0)
                 
-                audio_file = open(
-                    VOICE_TESTING, "rb"
-                )
-                audio_bytes = audio_file.read()
-                st.audio(audio_bytes, format="audio/mp3", start_time=0)
-                
-                results = "🌟 Here are the recommended questions for improvement! Let's dive in and explore 🚀<ul>"
-                for question_number, question_text in zip(questions_id_list, questions_text_list):
-                    results += f"<li><strong>Question {question_number}:</strong> {question_text}</li>"  
-                results += "</ul>✨ Keep up the great work, and remember, every question is a step towards mastery! 📚"
-                text_placeholder.markdown(results, unsafe_allow_html=True)
+                    results = "🌟 Here are the recommended questions for improvement! Let's dive in and explore 🚀<ul>"
+                    for question_number, question_text in zip(questions_id_list, questions_text_list):
+                        results += f"<li><strong>Question 3.{question_number}:</strong> {question_text}</li>"  
+                    results += "</ul>✨ Keep up the great work, and remember, every question is a step towards mastery! 📚"
+                    text_placeholder.markdown(results, unsafe_allow_html=True)
 
     
 
