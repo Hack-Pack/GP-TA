@@ -31,3 +31,12 @@ def display_images(file_paths, default_image_path, title):
     else:
         # Display default image if no images are found
         st.image(default_image_path, caption="Default Image", width=500)
+        
+def read_video_csv(df):
+    # Prepare the context for GPT based on video names and their links
+    context = "Based on the following video titles and their links:\n"
+    for _, row in df.iterrows():
+        question = row['question']
+        video_link = row['link']
+        context += f"- {question}: {video_link}\n"
+    return context 

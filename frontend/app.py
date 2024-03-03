@@ -18,6 +18,7 @@ DEFAULT_IMAGE_PATH = "frontend/testing_data/placeholder.png"
 VOICE_TESTING = "backend/speech.mp3"
 LOGO = "frontend/testing_data/logo.jpeg"
 FAVICON = "frontend/testing_data/logo.png"
+VIDEO_LINK = "videos.csv"
 
 # Initialize state variables if not already present
 if "student_images_paths" not in st.session_state:
@@ -166,6 +167,8 @@ if page == "Homepage":
                 audio_bytes = audio_file.read()
                 st.audio(audio_bytes, format="audio/mp3", start_time=0)
                 
+                df = pd.read_csv(VIDEO_LINK)
+                context = read_video_csv(df)
                 results = "🌟 Here are the recommended questions for improvement! Let's dive in and explore 🚀<ul>"
                 with open(CSV_PATH, mode="r", encoding="utf-8") as csv_file:
                     # Create a CSV reader object from the file object
@@ -177,7 +180,9 @@ if page == "Homepage":
                     for row in csv_reader: 
                         question_id = row["question_id"]                                               
                         question = row["question"]
-                        results += f"<li><strong>Question {question_id}:</strong> {question}</li>"
+                        video = recommend_video_link(question, context)
+                        
+                        results += f"<li><strong>Question {question_id}:</strong> {question}. Ref: {video} </li>"
                         
                     results += "</ul>✨ Keep up the great work, and remember, every question is a step towards mastery! 📚"
                     
