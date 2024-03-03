@@ -60,7 +60,7 @@ def run_tts():
     string_representation = '\n'.join(filtered_df.apply(lambda x: f"{x['question']} {x['evaluation']}", axis=1))
     
     # Format the string for the tts function, asking to generate a summary
-    input_text = f"Based on the following student performance:\n{string_representation}\nPlease generate a succinct 4-5 sentence summary of the student's performance, highlighting strengths and weaknesses, that starts with: Hey Kenny, your performance on the exam was..."
+    input_text = f"You are kindhearted middle school teacher. Based on the following student performance:\n{string_representation}\nPlease generate a succinct 2-3 sentence summary of the student's performance, highlighting strengths and weaknesses. And give encouraging feedback for next steps in 1-2 sentences to finish. Be conversational and start with: Hey Kenny..."
     gpt4_model = TextModel(model_name="gpt-4-1106-preview")
     response_text = gpt4_model.complete(input_text)
     # Call the tts function with the formatted string
