@@ -44,6 +44,34 @@ st.markdown(
         [class*="st-"] p {
             font-size: 16px;
         }
+        [class*="st-"] span {
+            font-size: 25px;
+        }
+        .toast-message {
+            background-color: #F3E7D0;
+            color: black;
+            border-radius: 8px;
+            padding: 20px 50px;
+            position: fixed;
+            bottom: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            animation: fadeOut 3s ease-in-out forwards;
+        }
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                display: none;
+            }
+        }
     </style>
     """, unsafe_allow_html=True
 )
@@ -144,14 +172,17 @@ if page == "Homepage":
                         results = f"<br><strong>Question No: {question_id}</strong><br><span style='color: {color};'>{evaluation_text}</span><br>"
                         progress_bar.progress(int(question_id)*25)
                         status_text.text(f'Evaluated Question No: {question_id}')
-                        st.toast(f'Evaluated Question No: {question_id}', icon='🪄')                                                                   
+                        # st.toast(f'Evaluated Question No: {question_id}', icon='🪄') 
+
+                        # Display the toast message
+                        st.markdown(f'<div class="toast-message"> <b>🪄 &nbsp; Evaluated Question No: {question_id} </b></div>', unsafe_allow_html=True)                                        
 
                         # Use st.markdown to render the HTML
                         text_placeholder.markdown(results, unsafe_allow_html=True)
                     
-                    time.sleep(2)
-                    status_text.text('Evaluation Done!')
-                    st.toast('Hooray!', icon='🎉')
+                    time.sleep(3)
+                    status_text.text('Evaluation Done!')                    
+                    st.markdown('<div class="toast-message"> <b> Hooray! &nbsp; 🎉  <b> </div>', unsafe_allow_html=True)
                                         
             with tab2:
                 bool_speech_show = 0
