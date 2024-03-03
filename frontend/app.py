@@ -72,6 +72,7 @@ st.markdown(
                 display: none;
             }
         }
+        .stDeployButton {display:none;}
     </style>
     """, unsafe_allow_html=True
 )
