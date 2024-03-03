@@ -136,7 +136,7 @@ if page == "Homepage":
                         # Choose color based on correctness
                         color = "green" if is_correct else "orange"
                         if is_correct:
-                            time.sleep(3)
+                            time.sleep(2)
                             
                         question_placeholder = st.empty()
                         results = f"<br><strong>Question No: {question_id}</strong><br><span style='color: {color};'>{evaluation_text}</span><br>"
