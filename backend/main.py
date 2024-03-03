@@ -65,3 +65,19 @@ def run_tts():
     response_text = gpt4_model.complete(input_text)
     # Call the tts function with the formatted string
     tts(response_text)
+    
+def recommend_video_link(question, context):        
+    client = OpenAI()
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "Based on the video titles below, recommend the most relevant video for the question. If the question can't be answered based on the titles, then return empty string. Note: Only provide the link to the video and no additional text.\n\n" + context},
+            {"role": "user", "content": f"Question: {question}\nAnswer:"}
+        ],
+        temperature=0,
+        max_tokens=100,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0,    
+    )
+    return response.choices[0].message.content
