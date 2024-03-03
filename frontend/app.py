@@ -10,6 +10,8 @@ from utils import *
 from backend.main import *
 
 
+
+
 # FILE PATHS
 PROMPT_PATH = "prompts/csv_promt.txt"
 CSV_PATH = "backend/out.csv"
@@ -154,7 +156,7 @@ if page == "Homepage":
             with tab2:
                 bool_speech_show = 0
                 if st.button("Generate Feedback "):
-                    run_tts()
+                    res = run_tts()
                     rec_questions = top_k_matched_questions("Simplify the expression 2x^2 - 8 / x - 2", k=5)
                     questions_id_list = [int(question.split('.')[0]) for question in rec_questions]
                     questions_text_list = ['.'.join(question.split('.')[1:]).strip() for question in rec_questions]
@@ -173,6 +175,10 @@ if page == "Homepage":
                     )
                     audio_bytes = audio_file.read()
                     st.audio(audio_bytes, format="audio/mp3", start_time=0)
+
+                    with st.expander("Audio Transcript", expanded=False):
+                        text_placeholder_audio_transcript = st.empty()
+                        text_placeholder_audio_transcript.markdown(res, unsafe_allow_html=True)
                 
                     results = "🌟 Here are the recommended questions for improvement! Let's dive in and explore 🚀<ul>"
                     for question_number, question_text in zip(questions_id_list, questions_text_list):
