@@ -7,7 +7,7 @@ import time
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import streamlit as st
 from utils import *
-from backend.main import process_images, evaluate_question
+from backend.main import *
 
 # FILE PATHS
 PROMPT_PATH = "prompts/csv_promt.txt"
@@ -15,7 +15,7 @@ CSV_PATH = "backend/out.csv"
 STUDENT_IMAGES = "data/student_images"
 INSTRUCTOR_IMAGES = "data/instructor_images"
 DEFAULT_IMAGE_PATH = "frontend/testing_data/placeholder.png"
-VOICE_TESTING = "frontend/testing_data/speech.mp3"
+VOICE_TESTING = "backend/speech.mp3"
 LOGO = "frontend/testing_data/logo.jpeg"
 FAVICON = "frontend/testing_data/logo.png"
 
@@ -153,7 +153,7 @@ if page == "Homepage":
             with tab2:
                 st.title("Feedback")
                 if st.button("Generate Feedback "):
-                    pass
+                    run_tts()
                 text_placeholder = st.empty()
                 
                 # TODO: TTS

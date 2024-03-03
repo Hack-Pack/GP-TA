@@ -44,3 +44,24 @@ def evaluate_question(question_id, question, student_answer, instructor_answer):
     df.to_csv(PATH_OUT, index=False)
 
     return evaluation_response
+
+def run_tts():
+    # Assume tts function is defined elsewhere in your code
+    # and pandas is already imported as pd
+
+    # Load the DataFrame
+    df = pd.read_csv('backend/out.csv')
+    
+    # Filter df to only "question" and "evaluation" columns
+    filtered_df = df[['question', 'evaluation']]
+    
+    # Convert all rows in these columns to a single string representation
+    # Each row's values are joined by a space, and rows are separated by a newline
+    string_representation = '\n'.join(filtered_df.apply(lambda x: f"{x['question']} {x['evaluation']}", axis=1))
+    
+    # Format the string for the tts function, asking to generate a summary
+    input_text = f"Based on the following student performance:\n{string_representation}\nPlease generate a succinct 4-5 sentence summary of the student's performance, highlighting strengths and weaknesses, that starts with: Hey Kenny, your performance on the exam was..."
+    gpt4_model = TextModel(model_name="gpt-4-1106-preview")
+    response_text = gpt4_model.complete(input_text)
+    # Call the tts function with the formatted string
+    tts(response_text)

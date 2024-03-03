@@ -57,7 +57,7 @@ class VisionModel(Model):
         
         return response.choices[0].message.content
     
-def tts(input_text, output_file):
+def tts(input_text, output_file="backend/speech.mp3"):
     client = OpenAI()
     response = client.audio.speech.create(
         model="tts-1",
