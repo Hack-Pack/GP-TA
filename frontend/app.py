@@ -30,14 +30,6 @@ if "instructor_images_path" not in st.session_state:
 # Set wide mode
 st.set_page_config(page_title="Guided Sprout", page_icon=FAVICON , layout="wide")
 
-# Hide the Streamlit top red bar
-hide_decoration_bar_style = '''
-    <style>
-        header {visibility: hidden;}
-    </style>
-'''
-st.markdown(hide_decoration_bar_style, unsafe_allow_html=True)
-
 st.markdown(
     """
     <style>
