@@ -1,0 +1,6 @@
+[theme]
+primaryColor = "#C0392B"        # A strong red to grab attention and guide user interaction
+backgroundColor = "#FBF8F1"     # A warm, almost white background for a bright and airy feel
+secondaryBackgroundColor = "#F3E7D0" 
+textColor = "#641E16"           # A darker shade of red for text, ensuring legibility and impact
+font = "sans-serif"
