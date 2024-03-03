@@ -65,3 +65,5 @@ def run_tts():
     response_text = gpt4_model.complete(input_text)
     # Call the tts function with the formatted string
     tts(response_text)
+
+    return response_text
