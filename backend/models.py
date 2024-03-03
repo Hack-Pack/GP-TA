@@ -17,7 +17,7 @@ class TextModel(Model):
     def __init__(self, model_name="gpt-4-1106-preview"):
         super().__init__(model_name)
 
-    def complete(self, prompt, role):
+    def complete(self, prompt, role="You are an experienced math teacher"):
         messages = [
             {"role": "system", "content": role},
             {"role": "user", "content": prompt}
@@ -53,7 +53,7 @@ class VisionModel(Model):
         response = client.chat.completions.create(model=self.model_name,
         messages=[{"role": "user", "content": content}],
         temperature=0,
-        max_tokens=4000)
+        max_tokens=3000)
         
         return response.choices[0].message.content
     

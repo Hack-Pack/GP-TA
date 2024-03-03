@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 import re
-from models import *
+from backend.models import *
 
 def dict_to_csv(dictionary, csv_file_path):
     # Initialize a list to hold the rows of the DataFrame
