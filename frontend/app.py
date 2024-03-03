@@ -16,7 +16,8 @@ STUDENT_IMAGES = "data/student_images"
 INSTRUCTOR_IMAGES = "data/instructor_images"
 DEFAULT_IMAGE_PATH = "frontend/testing_data/placeholder.png"
 VOICE_TESTING = "frontend/testing_data/speech.mp3"
-LOGO = "frontend/testing_data/logo.png"
+LOGO = "frontend/testing_data/logo.jpeg"
+FAVICON = "frontend/testing_data/logo.png"
 
 # Initialize state variables if not already present
 if "student_images_paths" not in st.session_state:
@@ -26,7 +27,7 @@ if "instructor_images_path" not in st.session_state:
     st.session_state.instructor_images_path = []
 
 # Set wide mode
-st.set_page_config(layout="wide")
+st.set_page_config(page_title="Guided Sprout", page_icon=FAVICON , layout="wide")
 
 st.markdown(
     """
@@ -45,8 +46,7 @@ st.markdown(
 )
 
 with st.sidebar:
-    st.image(LOGO, width=200)  # Placeholder for a logo
-    st.markdown("""<h1 style = "text-align: center">Guided Sprout</h1>""", unsafe_allow_html=True)
+    st.image(LOGO, width=300)  # Placeholder for a logo
 
         # Page navigation
     page = st.selectbox("Choose a page", ["Homepage", "Table"])
