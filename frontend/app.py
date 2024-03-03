@@ -151,36 +151,29 @@ if page == "Homepage":
                     st.toast('Hooray!', icon='🎉')
                                         
             with tab2:
-                st.title("Feedback")
                 if st.button("Generate Feedback "):
                     run_tts()
+                    rec_questions = top_k_matched_questions("Simplify the expression 2x^2 - 8 / x - 2", k=5)
+                    questions_id_list = [int(question.split('.')[0]) for question in rec_questions]
+                    questions_text_list = ['.'.join(question.split('.')[1:]).strip() for question in rec_questions]
+
+
                 text_placeholder = st.empty()
                 
                 # TODO: TTS
                 # Adding an audio player
-                st.write("Listen to our feedback request:")
+                st.write("Listen to your assignment feedback!")
                 
                 audio_file = open(
                     VOICE_TESTING, "rb"
-                )  # Update the path to your audio file
+                )
                 audio_bytes = audio_file.read()
                 st.audio(audio_bytes, format="audio/mp3", start_time=0)
                 
                 results = "🌟 Here are the recommended questions for improvement! Let's dive in and explore 🚀<ul>"
-                with open(CSV_PATH, mode="r", encoding="utf-8") as csv_file:
-                    # Create a CSV reader object from the file object
-                    csv_reader = csv.DictReader(csv_file)
-                    progress_bar = st.progress(0)
-                    status_text = st.empty()
-
-                    # TODO: Iterate over each row in the CSV
-                    for row in csv_reader: 
-                        question_id = row["question_id"]                                               
-                        question = row["question"]
-                        results += f"<li><strong>Question {question_id}:</strong> {question}</li>"
-                        
-                    results += "</ul>✨ Keep up the great work, and remember, every question is a step towards mastery! 📚"
-                    
+                for question_number, question_text in zip(questions_id_list, questions_text_list):
+                    results += f"<li><strong>Question {question_number}:</strong> {question_text}</li>"  
+                results += "</ul>✨ Keep up the great work, and remember, every question is a step towards mastery! 📚"
                 text_placeholder.markdown(results, unsafe_allow_html=True)
 
     

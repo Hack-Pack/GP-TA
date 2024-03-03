@@ -75,7 +75,7 @@ def cosine_similarity_manual(vec1, vec2):
 # Function to compute cosine similarity and return top k matches
 def top_k_matched_questions(query, k=5):
     # Path to the CSV file
-    csv_path = 'embedded_questions.csv'
+    csv_path = 'backend/embedded_questions.csv'
     questions_df = read_embeddings(csv_path)
     
     # Get embedding for the query
