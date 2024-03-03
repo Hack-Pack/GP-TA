@@ -151,6 +151,8 @@ if page == "Homepage":
                                         
             with tab2:
                 st.title("Feedback")
+                if st.button("Generate Feedback "):
+                    pass
                 text_placeholder = st.empty()
                 
                 # TODO: TTS
