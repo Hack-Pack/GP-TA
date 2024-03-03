@@ -21,6 +21,7 @@ def dict_to_csv(dictionary, csv_file_path):
     
     # Convert the list of rows into a DataFrame
     df = pd.DataFrame(rows)
+    df["question_id"] = df["question_id"].astype(int)
     
     # Save the DataFrame to a CSV file
     df.to_csv(csv_file_path, index=False)

@@ -110,10 +110,6 @@ if page == "Homepage":
             if evaluate_button_placeholder.button("Evaluate"):
                 # Clear the placeholder, making the button disappear
                 evaluate_button_placeholder.empty()
-                print(
-                    st.session_state.student_images_paths,
-                    st.session_state.instructor_images_path,
-                )
                 results = ""
                 with open(CSV_PATH, mode="r", encoding="utf-8") as csv_file:
                     # Create a CSV reader object from the file object
@@ -122,7 +118,10 @@ if page == "Homepage":
                     status_text = st.empty()
 
                     # Iterate over each row in the CSV
-                    for row in csv_reader:                        
+                    counter = 0
+                    for row in csv_reader: 
+                        counter += 1
+                        if counter > 4: break                      
                         question_id = row["question_id"]
                         question = row["question"]
                         student_answer = row["student_answer"]
@@ -130,7 +129,7 @@ if page == "Homepage":
                                                 
                         status_text.text(f'Evaluating Question No: {question_id}')
                         evaluation_text, is_correct = evaluate_question(
-                            question, student_answer, instructor_answer
+                            question_id, question, student_answer, instructor_answer
                         )
                                                 
                         # Choose color based on correctness
