@@ -61,7 +61,7 @@ def tts(input_text, output_file):
     client = OpenAI()
     response = client.audio.speech.create(
         model="tts-1",
-        voice="alloy",
+        voice="shimmer",
         input=input_text
     )
     response.stream_to_file(output_file)

@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 import csv
 import pandas as pd
+import time
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import streamlit as st
@@ -14,6 +15,7 @@ CSV_PATH = "backend/out.csv"
 STUDENT_IMAGES = "data/student_images"
 INSTRUCTOR_IMAGES = "data/instructor_images"
 DEFAULT_IMAGE_PATH = "frontend/testing_data/placeholder.png"
+VOICE_TESTING = "frontend/testing_data/speech.mp3"
 
 # Initialize state variables if not already present
 if "student_images_paths" not in st.session_state:
@@ -26,7 +28,7 @@ if "instructor_images_path" not in st.session_state:
 st.set_page_config(layout="wide")
 
 # Page navigation
-page = st.sidebar.selectbox("Choose a page", ["Homepage", "Feedback", "Table"])
+page = st.sidebar.selectbox("Choose a page", ["Homepage", "Table"])
 
 if page == "Homepage":
     st.title("Homepage")
@@ -77,7 +79,7 @@ if page == "Homepage":
     )
 
     with col2:
-        tab1, tab2 = st.tabs([" ", " "])
+        tab1, tab2 = st.tabs(["Evaluation", "Feedback"])
         with tab1:
             # Create an empty placeholder
             text_placeholder = st.empty()
@@ -103,22 +105,25 @@ if page == "Homepage":
                         )
                         # Choose color based on correctness
                         color = "green" if is_correct else "orange"
-                        results += f"\n\n\n\n{question}<br><span style='color: {color};'>{evaluation_text}</span><br>"
+                        if is_correct:
+                            time.sleep(3)
+                        results = f"<br><span style='color: {color};'>{evaluation_text}</span><br>"
+                        
 
-                    # Use st.markdown to render the HTML
-                    text_placeholder.markdown(results, unsafe_allow_html=True)
+                        # Use st.markdown to render the HTML
+                        text_placeholder.markdown(results, unsafe_allow_html=True)
+            with tab2:
+                st.title("Feedback")
 
+                # Adding an audio player
+                st.write("Listen to our feedback request:")
+                audio_file = open(
+                    VOICE_TESTING, "rb"
+                )  # Update the path to your audio file
+                audio_bytes = audio_file.read()
+                st.audio(audio_bytes, format="audio/mp3", start_time=0)
 
-elif page == "Feedback":
-    st.title("Feedback")
-
-    # Adding an audio player
-    st.write("Listen to our feedback request:")
-    audio_file = open(
-        "testing_data/speech.mp3", "rb"
-    )  # Update the path to your audio file
-    audio_bytes = audio_file.read()
-    st.audio(audio_bytes, format="audio/mp3", start_time=0)
+    
 
 
 elif page == "Table":
